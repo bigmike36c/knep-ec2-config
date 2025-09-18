@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:8080"
       - "8443:8443"
-      - "9092:9092"
+      - "19092-19095:19092-19095"
     env_file: "knep.env"
     environment:
       KNEP__RUNTIME__DRAIN_DURATION: 1s # makes shutdown quicker, not recommended to be set like this in production 
