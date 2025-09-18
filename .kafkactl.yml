@@ -7,7 +7,7 @@ contexts:
         enabled: false # Only enable if KNEP is doing TLS on 9092
     sasl:
       enabled: true # Enable SASL SCRAM-SHA-512 authentication
-      mechanism: SCRAM-SHA-512
+      mechanism: scram-sha512
       username: "testuser"
       password: "testpassword123"
 current-context: knep-local
