@@ -15,6 +15,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    volumes:
-      - ./config/certs:/var/tls
-      - ./config/creds:/var/creds

@@ -1,0 +1,68 @@
+backend_clusters:
+  - config:
+      authentication:
+        insecure_allow_anonymous_virtual_cluster_auth: true
+        sasl_scram_sha512:
+          password:
+            string:
+              value: <your-password-here>
+            type: string
+          username:
+            string:
+              value: <your-username-here>
+            type: string
+        type: sasl_scram_sha512
+      bootstrap_servers:
+        - endpoint: <your-bootstrap-server-1-here>
+        - endpoint: <your-bootstrap-server-2-here>
+        - endpoint: <your-bootstrap-server-3-here>
+      tls:
+        insecure_skip_verify: true
+    id: msk-cluster
+listeners:
+  - config:
+      addresses:
+        - address: 0.0.0.0
+      policies:
+        - config:
+            forward_to_virtual_cluster:
+              port_mapping:
+                advertised_host: localhost
+                bootstrap_port: at_start
+                destination:
+                  id: my-vc
+                  type: virtual_cluster
+              type: port_mapping
+            type: forward_to_virtual_cluster
+          id: forward
+      ports:
+        - 19092-19095
+    id: main
+virtual_clusters:
+  - config:
+      authentication:
+        - sasl_scram_sha512:
+            mediation:
+              type: passthrough
+          type: sasl_scram_sha512
+      destination:
+        id: msk-cluster
+        type: backend_cluster
+      policies:
+        consume:
+          - config:
+              schema_validation:
+                policies:
+                  - config:
+                      filter_records:
+                        filter: >-
+                          record.value.validated &&
+                          record.value.content['hello'] == "world"
+                      type: filter_records
+                    id: filter_records
+                record_value:
+                  failure_action: mark
+                type: json
+              type: schema_validation
+            id: my-schema-val
+    id: my-vc
