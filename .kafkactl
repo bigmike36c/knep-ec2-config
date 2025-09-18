@@ -1,0 +1,10 @@
+contexts:
+  knep-local:
+    brokers:
+      - "localhost:9092"          # KNEP container exposing Kafka API
+    security:
+      tls:
+        enabled: false            # Only enable if KNEP is doing TLS on 9092
+    sasl:
+      enabled: false               # Only enable if KNEP requires SASL on this endpoint
+current-context: knep-local
